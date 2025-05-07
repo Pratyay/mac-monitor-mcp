@@ -1,4 +1,4 @@
-# MacOS Resource Monitor
+# MacOS Resource Monitor MCP Server
 
 A Model Context Protocol (MCP) server that identifies resource-intensive processes on macOS and provides performance improvement suggestions.
 
