@@ -1,6 +1,6 @@
 """
 Simple MacOS Resource Monitor - An MCP server that identifies resource-intensive processes
-for CPU, Memory, Disk, and Network usage.
+for CPU, Memory, and Network usage.
 """
 import os
 import subprocess
@@ -15,7 +15,7 @@ mcp = FastMCP("Simple MacOS Resource Monitor")
 @mcp.tool()
 def get_resource_intensive_processes() -> str:
     """
-    Identify resource-intensive processes on macOS across CPU, memory, disk, and network.
+    Identify resource-intensive processes on macOS across CPU, memory, and network.
 
     Returns:
         A string containing information about resource-intensive processes,
