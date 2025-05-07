@@ -36,7 +36,7 @@ MacOS Resource Monitor is a lightweight MCP server that exposes a REST API endpo
 2. Create a virtual environment (recommended):
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate  
    ```
 
 3. Install the required dependencies:
