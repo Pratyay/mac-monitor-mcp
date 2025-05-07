@@ -48,12 +48,11 @@ MacOS Resource Monitor is a lightweight MCP server that exposes a REST API endpo
 
 1. Start the MCP server:
    ```bash
-   python monitor.py
+   python src/monitor.py
    ```
 
 2. The server will start and expose the MCP endpoint, which can be accessed by an LLM or other client.
 
-3. To query resource information, call the `get_resource_intensive_processes` tool.
 
 ## Example Response
 
