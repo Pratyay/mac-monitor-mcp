@@ -48,7 +48,7 @@ MacOS Resource Monitor is a lightweight MCP server that exposes a REST API endpo
 
 1. Start the MCP server:
    ```bash
-   python macos_resource_monitor.py
+   python monitor.py
    ```
 
 2. The server will start and expose the MCP endpoint, which can be accessed by an LLM or other client.
@@ -127,10 +127,6 @@ LLM: I'll check your system resources.
 [Uses get_resource_intensive_processes tool]
 I've analyzed your system and found that Google Chrome is using 56.2% of your CPU with multiple instances running. This is likely the main cause of the slowdown. I recommend closing unused Chrome tabs and extensions, or switching to Safari which is more memory-efficient on macOS.
 ```
-
-## License
-
-[MIT License](LICENSE)
 
 ## Contributing
 
