@@ -29,8 +29,8 @@ MacOS Resource Monitor is a lightweight MCP server that exposes a REST API endpo
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/macos-resource-monitor.git
-   cd macos-resource-monitor
+   git clone https://github.com/Pratyay/mac-monitor-mcp.git
+   cd mac-monitor-mcp
    ```
 
 2. Create a virtual environment (recommended):
@@ -41,7 +41,7 @@ MacOS Resource Monitor is a lightweight MCP server that exposes a REST API endpo
 
 3. Install the required dependencies:
    ```bash
-   pip install mcp-server
+   pip install mcp
    ```
 
 ## Usage
