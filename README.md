@@ -9,7 +9,7 @@ MacOS Resource Monitor is a lightweight MCP server that exposes an MCP endpoint 
 ## Requirements
 
 - macOS operating system
-- Python 3.7+
+- Python 3.10+
 - MCP server library
 
 ## Installation
