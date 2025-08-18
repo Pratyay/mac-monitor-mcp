@@ -1,4 +1,5 @@
 # MacOS Resource Monitor MCP Server
+[![Trust Score](https://archestra.ai/mcp-catalog/api/badge/quality/Pratyay/mac-monitor-mcp)](https://archestra.ai/mcp-catalog/pratyay__mac-monitor-mcp)
 
 A Model Context Protocol (MCP) server that identifies resource-intensive processes on macOS across CPU, memory, and network usage.
 
