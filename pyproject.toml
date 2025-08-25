@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mac-monitor"
+version = "0.2.0"
+description = "A Model Context Protocol (MCP) server for monitoring macOS system resources"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Mac Monitor MCP", email = "contact@example.com"},
+]
+keywords = ["mcp", "macos", "monitoring", "system", "resources"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Pratyay/mac-monitor-mcp"
+Repository = "https://github.com/Pratyay/mac-monitor-mcp.git"
+Issues = "https://github.com/Pratyay/mac-monitor-mcp/issues"
+
+[project.scripts]
+mac-monitor = "mac_monitor.monitor:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mac_monitor"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/README.md",
+]

@@ -14,6 +14,23 @@ MacOS Resource Monitor is a lightweight MCP server that exposes an MCP endpoint 
 
 ## Installation
 
+### Option 1: Global Installation (Recommended)
+
+Install the MCP server globally using uv for system-wide access:
+
+```bash
+git clone https://github.com/Pratyay/mac-monitor-mcp.git
+cd mac-monitor-mcp
+uv tool install .
+```
+
+Now you can run the server from anywhere:
+```bash
+mac-monitor
+```
+
+### Option 2: Development Installation
+
 1. Clone this repository:
    ```bash
    git clone https://github.com/Pratyay/mac-monitor-mcp.git
@@ -33,28 +50,69 @@ MacOS Resource Monitor is a lightweight MCP server that exposes an MCP endpoint 
 
 ## Usage
 
-1. Start the MCP server:
-   ```bash
-   python src/monitor.py
-   ```
+### Global Installation
+If you installed globally with uv:
+```bash
+mac-monitor
+```
 
-2. You should see the message:
-   ```
-   Simple MacOS Resource Monitor MCP server starting...
-   Monitoring CPU, Memory, and Network resource usage...
-   ```
+### Development Installation
+If you're running from the project directory:
+```bash
+python src/mac_monitor/monitor.py
+```
 
-3. The server will start and expose the MCP endpoint, which can be accessed by an LLM or other client.
+Or using uv run (from project directory):
+```bash
+uv run mac-monitor
+```
 
-### Using the Tool
+You should see the message:
+```
+Simple MacOS Resource Monitor MCP server starting...
+Monitoring CPU, Memory, and Network resource usage...
+```
 
-The server exposes a single tool:
+The server will start and expose the MCP endpoint, which can be accessed by an LLM or other client.
 
-- `get_resource_intensive_processes()`: Returns information about the most resource-intensive processes
+### Available Tools
 
-When called, this tool will return a JSON object containing information about the top resource consumers in each category (CPU, memory, and network).
+The server exposes three tools:
 
-### Sample Output
+#### 1. `get_resource_intensive_processes()`
+Returns information about the top 5 most resource-intensive processes in each category (CPU, memory, and network).
+
+#### 2. `get_processes_by_category(process_type, page=1, page_size=10, sort_by="auto", sort_order="desc")`
+Returns all processes in a specific category with advanced filtering, pagination, and sorting options.
+
+**Parameters:**
+- `process_type`: `"cpu"`, `"memory"`, or `"network"`
+- `page`: Page number (starting from 1, default: 1)
+- `page_size`: Number of processes per page (default: 10, max: 100)
+- `sort_by`: Sort field - `"auto"` (default metric), `"pid"`, `"command"`, or category-specific fields:
+  - **CPU**: `"cpu_percent"`, `"pid"`, `"command"`
+  - **Memory**: `"memory_percent"`, `"resident_memory_kb"`, `"pid"`, `"command"`
+  - **Network**: `"network_connections"`, `"pid"`, `"command"`
+- `sort_order`: `"desc"` (default) or `"asc"`
+
+**Example Usage:**
+```python
+# Get first page of CPU processes (default: sorted by CPU% descending)
+get_processes_by_category("cpu")
+
+# Get memory processes sorted by resident memory, highest first
+get_processes_by_category("memory", sort_by="resident_memory_kb", sort_order="desc")
+
+# Get network processes sorted by command name A-Z, page 2
+get_processes_by_category("network", page=2, sort_by="command", sort_order="asc")
+
+# Get 20 CPU processes per page, sorted by PID ascending
+get_processes_by_category("cpu", page_size=20, sort_by="pid", sort_order="asc")
+```
+
+#### 3. `get_system_overview()`\nReturns comprehensive system overview with aggregate statistics similar to Activity Monitor. Provides CPU, memory, disk, network statistics, and intelligent performance analysis to help identify bottlenecks and optimization opportunities.\n\n**Features:**\n- **CPU Metrics**: Usage percentages, load averages, core count\n- **Memory Analysis**: Total/used/free memory with percentages\n- **Disk Statistics**: Storage usage across all filesystems\n- **Network Overview**: Active connections, interface statistics\n- **Performance Analysis**: Intelligent bottleneck detection and recommendations\n- **System Information**: macOS version, uptime, process count\n\n**Example Usage:**\n```python\n# Get comprehensive system overview\nget_system_overview()\n```\n\n**Use Cases:**\n- System performance monitoring and analysis\n- Identifying performance bottlenecks and slowdowns\n- Resource usage trending and capacity planning\n- Troubleshooting system performance issues\n- Getting quick system health overview\n\n### Sample Output
+
+#### `get_resource_intensive_processes()` Output
 
 ```json
 {
@@ -97,6 +155,39 @@ When called, this tool will return a JSON object containing information about th
 }
 ```
 
+#### `get_processes_by_category()` Output
+
+```json
+{
+  "process_type": "cpu",
+  "processes": [
+    {
+      "pid": "1234",
+      "cpu_percent": 45.2,
+      "command": "firefox"
+    },
+    {
+      "pid": "5678",
+      "cpu_percent": 32.1,
+      "command": "Chrome"
+    }
+  ],
+  "sorting": {
+    "sort_by": "cpu_percent",
+    "sort_order": "desc",
+    "requested_sort_by": "auto"
+  },
+  "pagination": {
+    "current_page": 1,
+    "page_size": 10,
+    "total_processes": 156,
+    "total_pages": 16,
+    "has_next_page": true,
+    "has_previous_page": false
+  }
+}
+```
+
 ## How It Works
 
 The MacOS Resource Monitor uses built-in macOS command-line utilities:
@@ -120,11 +211,32 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+## Management Commands
+
+If you installed the server globally with uv:
+
+- **List installed tools:** `uv tool list`
+- **Uninstall:** `uv tool uninstall mac-monitor`
+- **Upgrade:** `uv tool install --force .` (from project directory)
+- **Install from Git:** `uv tool install git+https://github.com/Pratyay/mac-monitor-mcp.git`
+
+## Recent Updates
+
+### Version 0.2.0 (Latest)
+- ✅ Added `get_processes_by_category()` tool with pagination and sorting
+- ✅ Added comprehensive sorting options (CPU%, memory, PID, command name)
+- ✅ Added proper Python packaging with `pyproject.toml`
+- ✅ Added global installation support via `uv tool install`
+- ✅ Enhanced error handling and input validation
+- ✅ Added pagination metadata with navigation information
+
 ## Potential Improvements
 
 Here are some ways you could enhance this monitor:
 
 - Add disk I/O monitoring
 - Improve network usage monitoring to include bandwidth
-- Add visualization capabilities
+- Add visualization capabilities  
 - Extend compatibility to other operating systems
+- Add process filtering by resource thresholds
+- Add historical data tracking and trends
