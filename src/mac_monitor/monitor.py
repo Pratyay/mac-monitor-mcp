@@ -6,10 +6,18 @@ import os
 import subprocess
 import json
 import re
+import logging
 from mcp.server.fastmcp import FastMCP
 
 # Initialize the MCP server
 mcp = FastMCP("Simple MacOS Resource Monitor")
+
+def safe_call(func, error_prefix="Operation failed"):
+    """Helper for safe function calls with consistent error format"""
+    try:
+        return func()
+    except Exception as e:
+        return {"error": f"{error_prefix}: {str(e)}"}
 
 # ===== MCP Tool for Process Monitoring =====
 @mcp.tool()
@@ -21,20 +29,16 @@ def get_resource_intensive_processes() -> str:
         A string containing information about resource-intensive processes,
         which can be analyzed to provide optimization suggestions.
     """
-    try:
-        # Get system resource data
-        system_data = {
-            "cpu_intensive_processes": get_cpu_intensive_processes(),
-            "memory_intensive_processes": get_memory_intensive_processes(),
-            "network_intensive_processes": get_network_intensive_processes()
-        }
+    # Get system resource data with per-category error handling
+    system_data = {
+        "cpu_intensive_processes": safe_call(get_cpu_intensive_processes, "CPU monitoring failed"),
+        "memory_intensive_processes": safe_call(get_memory_intensive_processes, "Memory monitoring failed"),
+        "network_intensive_processes": safe_call(get_network_intensive_processes, "Network monitoring failed")
+    }
 
-        # Format the results as a nice JSON string
-        result = json.dumps(system_data, indent=2)
-        return result
-
-    except Exception as e:
-        return f"Error monitoring system resources: {str(e)}"
+    # Format the results as a nice JSON string
+    result = json.dumps(system_data, indent=2)
+    return result
 
 @mcp.tool()
 def get_processes_by_category(process_type: str, page: int = 1, page_size: int = 10, 
@@ -159,23 +163,18 @@ def get_system_overview() -> str:
     Returns:
         JSON string containing system overview with performance metrics and analysis
     """
-    try:
-        system_overview = {
-            "timestamp": get_current_timestamp(),
-            "cpu": get_cpu_overview(),
-            "memory": get_memory_overview(), 
-            "disk": get_disk_overview(),
-            "network": get_network_overview(),
-            "system": get_system_info(),
-            "performance_analysis": analyze_system_performance()
-        }
-        
-        return json.dumps(system_overview, indent=2)
-        
-    except Exception as e:
-        return json.dumps({
-            "error": f"Error retrieving system overview: {str(e)}"
-        })
+    # Get comprehensive system data with per-category error handling
+    system_overview = {
+        "timestamp": get_current_timestamp(),
+        "cpu": safe_call(get_cpu_overview, "CPU overview failed"),
+        "memory": safe_call(get_memory_overview, "Memory overview failed"), 
+        "disk": safe_call(get_disk_overview, "Disk overview failed"),
+        "network": safe_call(get_network_overview, "Network overview failed"),
+        "system": safe_call(get_system_info, "System info failed"),
+        "performance_analysis": safe_call(analyze_system_performance, "Performance analysis failed")
+    }
+    
+    return json.dumps(system_overview, indent=2)
 
 def run_command(cmd):
     """Helper function to run a command and return its output."""
@@ -382,7 +381,7 @@ def sort_processes(processes, process_type, sort_by, sort_order):
             
     except Exception as e:
         # If sorting fails, return processes unsorted
-        print(f"Warning: Sorting failed: {e}")
+        logging.warning(f"Sorting failed: {e}")
         return processes
 
 # ===== System Overview Helper Functions =====
@@ -415,7 +414,7 @@ def get_cpu_overview():
                         elif 'idle' in part:
                             cpu_info['idle_percent'] = float(part.split('%')[0])
                 except (ValueError, IndexError) as e:
-                    print(f"Warning: Could not parse CPU usage line: {line}. Error: {e}")
+                    logging.warning(f"Could not parse CPU usage line: {line}. Error: {e}")
                     continue
             elif 'Load Avg:' in line:
                 # Example: Load Avg: 7.95, 7.63, 8.14 
@@ -428,7 +427,7 @@ def get_cpu_overview():
                         '15min': load_values[2] if len(load_values) > 2 else 0.0
                     }
                 except (ValueError, IndexError) as e:
-                    print(f"Warning: Could not parse Load Avg line: {line}. Error: {e}")
+                    logging.warning(f"Could not parse Load Avg line: {line}. Error: {e}")
         
         # Fallback: Get load averages from uptime if not already parsed from top
         if 'load_average' not in cpu_info:
@@ -449,7 +448,7 @@ def get_cpu_overview():
                     }
             except Exception as load_e:
                 cpu_info['load_average'] = {'1min': 0.0, '5min': 0.0, '15min': 0.0}
-                print(f"Warning: Could not parse load average: {load_e}")
+                logging.warning(f"Could not parse load average: {load_e}")
         
         # Get CPU core count
         try:
