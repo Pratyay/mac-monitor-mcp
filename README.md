@@ -110,7 +110,30 @@ get_processes_by_category("network", page=2, sort_by="command", sort_order="asc"
 get_processes_by_category("cpu", page_size=20, sort_by="pid", sort_order="asc")
 ```
 
-#### 3. `get_system_overview()`\nReturns comprehensive system overview with aggregate statistics similar to Activity Monitor. Provides CPU, memory, disk, network statistics, and intelligent performance analysis to help identify bottlenecks and optimization opportunities.\n\n**Features:**\n- **CPU Metrics**: Usage percentages, load averages, core count\n- **Memory Analysis**: Total/used/free memory with percentages\n- **Disk Statistics**: Storage usage across all filesystems\n- **Network Overview**: Active connections, interface statistics\n- **Performance Analysis**: Intelligent bottleneck detection and recommendations\n- **System Information**: macOS version, uptime, process count\n\n**Example Usage:**\n```python\n# Get comprehensive system overview\nget_system_overview()\n```\n\n**Use Cases:**\n- System performance monitoring and analysis\n- Identifying performance bottlenecks and slowdowns\n- Resource usage trending and capacity planning\n- Troubleshooting system performance issues\n- Getting quick system health overview\n\n### Sample Output
+#### 3. `get_system_overview()`
+Returns comprehensive system overview with aggregate statistics similar to Activity Monitor. Provides CPU, memory, disk, network statistics, and intelligent performance analysis to help identify bottlenecks and optimization opportunities.
+
+**Features:**
+ - **CPU Metrics**: Usage percentages, load averages, core count
+ - **Memory Analysis**: Total/used/free memory with percentages
+ - **Disk Statistics**: Storage usage across all filesystems
+ - **Network Overview**: Active connections, interface statistics
+ - **Performance Analysis**: Intelligent bottleneck detection and recommendations
+ - **System Information**: macOS version, uptime, process count
+
+**Example Usage:**
+```python
+ get_system_overview()  # Get comprehensive system overview
+```
+
+**Use Cases:** 
+- System performance monitoring and analysis
+- Identifying performance bottlenecks and slowdowns
+- Resource usage trending and capacity planning
+- Troubleshooting system performance issues
+- Getting quick system health overview
+
+## Sample Output   
 
 #### `get_resource_intensive_processes()` Output
 
