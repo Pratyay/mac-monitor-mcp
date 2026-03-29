@@ -3,6 +3,10 @@
 
 A Model Context Protocol (MCP) server that identifies resource-intensive processes on macOS across CPU, memory, and network usage.
 
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/pratyay-mac-monitor-mcp).
+
 ## Overview
 
 MacOS Resource Monitor is a lightweight MCP server that exposes an MCP endpoint for monitoring system resources. It analyzes CPU, memory, and network usage, and identifies the most resource-intensive processes on your Mac, returning data in a structured JSON format.
